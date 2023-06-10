@@ -18,6 +18,14 @@
 <body class="bg-dark text-light">
     <div class="container">
         <div class="row d-flex justify-content-center">
+            <div id="errorMsg" class="col-12 d-none text-center m-5">
+                <h1 class="text-danger">
+                    Error:
+                </h1>
+                <p class="text-danger">
+                    Probably CORS issues, but the token is not valid or the GraphQL endpoint is not reachable.
+                </p>
+            </div>
             <div id="signIn" class="container w-50 m-3 d-none col-12">
                 <h1>Sign in (Provide authentication for the GraphQL endpoint)</h1>
                 <form id="signInForm">
@@ -29,7 +37,7 @@
                         <input type="password" name="password" id="password" placeholder="Password" class="form-control"
                             required>
                     </div>
-                    <div id="errorMsg">
+                    <div id="signInErrorMsg">
                         <p class="text-danger" id="msg"></p>
                     </div>
                     <input type="submit" value="Sign in" class="btn btn-primary">

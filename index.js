@@ -1,27 +1,38 @@
 document.getElementById('signInForm').addEventListener('submit', signIn);
 validateJWT();
+
+/**
+ * Validates the JWT token stored in the "token" cookie
+ * @returns {Promise<boolean>} True if the JWT is valid, false otherwise
+ */
 async function validateJWT() {
-    const token = document.cookie
-        .split(';')
-        .find((c) => c.startsWith('token'))
-        ?.split('=')[1];
+    const token = getToken();
     if (!token) {
         document.getElementById('signIn').classList.remove('d-none');
         return false;
     }
-    const res = await fetch(
-        'https://01.gritlab.ax/api/graphql-engine/v1/graphql',
-        {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Bearer ' + token,
-            },
-            body: JSON.stringify({
-                query: 'query { user { id } }',
-            }),
-        }
-    );
+    var res;
+    try {
+        res = await fetch(
+            'https://01.gritlab.ax/api/graphql-engine/v1/graphql',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer ' + token,
+                },
+                body: JSON.stringify({
+                    query: 'query { user { id } }',
+                }),
+            }
+        );
+    } catch (e) {
+        document.cookie = document.cookie.split(';').filter((c) => {
+            return !c.startsWith('token');
+        });
+        document.getElementById('errorMsg').classList.remove('d-none');
+        return false;
+    }
     const data = await res.json();
     if (data.errors) {
         document.cookie = document.cookie.split(';').filter((c) => {
@@ -35,6 +46,13 @@ async function validateJWT() {
     return true;
 }
 
+/**
+ * Takes the username and password from the form and sends a request to the server to sign in
+ *
+ * Sets the token cookie if the request is successful
+ * @param {Event} e
+ * @returns
+ */
 async function signIn(e) {
     e.preventDefault();
     if (await validateJWT()) {
@@ -51,8 +69,9 @@ async function signIn(e) {
     });
     if (!res.ok) {
         const err = await res.json();
-        document.getElementById('errorMsg').getElementById('msg').innerHTML =
-            err.error;
+        document
+            .getElementById('signInErrorMsg')
+            .getElementById('msg').innerHTML = err.error;
     }
     const data = await res.json();
     document.cookie = `token=${data};`;
@@ -61,10 +80,7 @@ async function signIn(e) {
 }
 
 async function showInfo() {
-    const token = document.cookie
-        .split(';')
-        .find((c) => c.startsWith('token'))
-        ?.split('=')[1];
+    const token = getToken();
     document.getElementById('content').classList.remove('d-none');
     const res = await fetch(
         'https://01.gritlab.ax/api/graphql-engine/v1/graphql',
@@ -166,4 +182,17 @@ async function showInfo() {
             },
         },
     });
+}
+
+/**
+ *   Returns the value of the token cookie
+ *
+ *   If the cookie is not found, returns undefined
+ *   @returns {string | undefined} The value of the token cookie
+ */
+function getToken() {
+    return document.cookie
+        .split(';')
+        .find((c) => c.startsWith('token'))
+        ?.split('=')[1];
 }
