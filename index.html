@@ -45,11 +45,15 @@
             </div>
             <div id="content" class="col-12 container m-3 d-none">
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-11">
                         <h1 class="text-center">grit:lab Dashboard</h1>
                     </div>
+                    <div class="col-1">
+                        <button id="logOutBtn" class="btn-outline-light rounded-2 bg-dark text-light" disabled>Log
+                            Out</button>
+                    </div>
                 </div>
-                <div class="row">
+                <div class="row mt-4">
                     <div class="col-6">
                         <div class="bg-secondary bg-opacity-25 rounded-3 p-2 h-100">
                             <h2>
@@ -66,8 +70,16 @@
                     </div>
                     <div class="col-6">
                         <div class="bg-secondary bg-opacity-25 rounded-3 p-2">
-                            <h2 class="text-center">XP (Growth per day awarded): </h2>
+                            <h2 class="text-center text-decoration-underline">XP (Growth per day awarded): </h2>
                             <canvas id="xpGraph"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-12 ">
+                        <div class="bg-secondary bg-opacity-25 rounded-3 p-2">
+                            <h2 class="text-center text-decoration-underline">Skills:</h2>
+                            <div id="skills" class="row d-flex justify-content-center text-center"></div>
                         </div>
                     </div>
                 </div>
