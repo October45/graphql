@@ -84,10 +84,9 @@ async function signIn(e) {
     });
     if (!res.ok) {
         const err = await res.json();
-        document
-            .getElementById('signInErrorMsg')
-            .getElementById('msg').innerHTML = err.error;
+        document.getElementById('msg').innerHTML = err.error;
         document.getElementById('logOutBtn').disabled = true;
+        return;
     }
     const data = await res.json();
     document.cookie = `token=${data};`;
