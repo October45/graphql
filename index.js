@@ -220,8 +220,10 @@ async function showInfo() {
         docker: 'Docker',
         algo: 'Algorithms',
         prog: 'Elementary Programming',
+        game: 'Game',
     };
     for (const [key, value] of Object.entries(skills)) {
+        console.log(key, value);
         const skill = document.createElement('div');
         skill.classList.add('skill', 'col-2', 'm-1');
         const heading = document.createElement('h3');
